@@ -3,7 +3,6 @@ package com.zei.rabbit.receive;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.rabbitmq.client.Channel;
-import com.zei.rabbit.config.RabbitQueueName;
 import com.zei.rabbit.dao.RabbitConsumerMapper;
 import com.zei.rabbit.entity.RabbitConsumerMessage;
 import com.zei.rabbit.entity.RabbitMessage;
