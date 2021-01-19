@@ -3,6 +3,7 @@ package com.zei.rabbit.receive;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.rabbitmq.client.Channel;
+import com.zei.rabbit.common.MsgConstants;
 import com.zei.rabbit.dao.RabbitConsumerMapper;
 import com.zei.rabbit.entity.RabbitConsumerMessage;
 import com.zei.rabbit.entity.RabbitMessage;
@@ -146,10 +147,12 @@ public class RabbitReceive {
                 log.info("消息 {}, messageId: {} 消费成功", rabbitMessage.getQueueName(), rabbitMessage.getMessageId());
                 rabbitConsumerMessage.setAck(1).setMqState(MessageReceiveState.TAKE_SUCCESS.getCode()).setUpdateTime(new Date());
                 rabbitConsumerMapper.update(rabbitConsumerMessage);
+                rabbitSender.sendOnly(MsgConstants.OK_MSG, rabbitMessage.getMessageId());
             } else {
                 log.error("消息 {}, messageId: {} 消费失败", rabbitMessage.getQueueName(), rabbitMessage.getMessageId());
                 rabbitConsumerMessage.setAck(1).setMqState(MessageReceiveState.TAKE_FAIL.getCode()).setUpdateTime(new Date());
                 rabbitConsumerMapper.update(rabbitConsumerMessage);
+                rabbitSender.sendOnly(MsgConstants.SORRY_MSG, rabbitMessage.getMessageId());
             }
         } else {
             log.info("消息messageId: {} 已接收，不进行重复处理!", rabbitMessage.getMessageId());

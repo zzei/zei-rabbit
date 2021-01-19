@@ -31,7 +31,7 @@ public interface RabbitMapper {
     @Select("select id, message_id from rabbit_message where message_id = #{messageId}")
     RabbitMessage getById(String messageId);
 
-    @Select("select id, message_id, queue_name, mq_state, data from rabbit_message where mq_state = #{reSendState} and send_num < #{sendNum}")
-    List<RabbitMessage> queryUnMessage(Integer reSendState, Integer sendNum);
+    @Select("select id, message_id, queue_name, mq_state, data from rabbit_message where mq_state in (#{reSendState}) and send_num < #{sendNum}")
+    List<RabbitMessage> queryUnMessage(String reSendState, Integer sendNum);
 
 }

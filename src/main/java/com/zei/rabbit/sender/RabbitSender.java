@@ -5,6 +5,7 @@ import com.zei.rabbit.dao.RabbitMapper;
 import com.zei.rabbit.entity.RabbitMessage;
 import com.zei.rabbit.enums.MessageSendState;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,22 @@ public class RabbitSender {
             rabbitMapper.update(new RabbitMessage().setMessageId(correlationData.getId()).setMqState(MessageSendState.SEND_FAIL.getCode()).setUpdateTime(new Date()));
         }
     };
+
+    /**
+     * 纯发送
+     * @param queueName
+     * @param message
+     * @return
+     */
+    public boolean sendOnly(String queueName, Object message) {
+        try {
+            rabbitTemplate.convertAndSend(queueName, JSON.toJSONString(message));
+        } catch (AmqpException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 消息发送方法

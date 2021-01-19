@@ -15,7 +15,9 @@ public enum MessageSendState {
 
     SEND_FAIL(0, "发送失败"),
     NORMAL(1, "初试状态"),
-    SEND_SUCCESS(2, "已发送");
+    SEND_SUCCESS(2, "已发送"),
+    CONSUME_SUCCESS(3, "消费成功"),
+    CONSUME_FAIL(4, "消费失败");
 
     private Integer code;
 

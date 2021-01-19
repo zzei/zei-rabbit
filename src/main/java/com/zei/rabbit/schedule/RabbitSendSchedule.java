@@ -40,7 +40,7 @@ public class RabbitSendSchedule {
     @Scheduled(cron = "0/30 0/1 * * * ?")
     public void send() {
         //对发送失败和消费失败的消息进行补偿发送,超过10次则不再处理
-        List<RabbitMessage> rabbitMessages = rabbitMapper.queryUnMessage(MessageSendState.SEND_FAIL.getCode(), 10);
+        List<RabbitMessage> rabbitMessages = rabbitMapper.queryUnMessage(MessageSendState.SEND_FAIL.getCode() + "," + MessageSendState.CONSUME_FAIL.getCode(), 10);
         if (rabbitMessages != null && rabbitMessages.size() > 0) {
             for (RabbitMessage rabbitMessage : rabbitMessages) {
                 log.info("发送未成功发送/消费的消息,messageId: {}, 状态state: {}", rabbitMessage.getMessageId(), rabbitMessage.getMqState());
